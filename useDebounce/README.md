@@ -1,6 +1,6 @@
-# useDebounce
+# React Debounce Hooks
 
-A React hook for debouncing values and functions to optimize performance and limit the rate of executions.
+A collection of React hooks for debouncing values and functions to optimize performance and limit the rate of executions.
 
 ## Installation
 
@@ -14,7 +14,7 @@ pnpm add @noeg/usedebounce
 
 ## Features
 
-- 🎯 Debounce any value or function
+- 🎯 Debounce values or functions
 - ⚡️ Optimized performance
 - 🔄 Automatic cleanup
 - ⏱️ Configurable delay
@@ -23,13 +23,16 @@ pnpm add @noeg/usedebounce
 
 ## Usage
 
-```typescript
-import { useDebounce } from '@noeg/usedebounce'
+### useDebounceValue
 
-// Debouncing a value
+Use this hook when you want to debounce a value that changes frequently (e.g., search input, form fields).
+
+```typescript
+import { useDebounceValue } from '@noeg/usedebounce'
+
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState('')
-  const debouncedSearchTerm = useDebounce(searchTerm, 500)
+  const debouncedSearchTerm = useDebounceValue(searchTerm, 500)
 
   useEffect(() => {
     // This effect will only run 500ms after the last searchTerm change
@@ -44,50 +47,105 @@ function SearchComponent() {
     />
   )
 }
+```
 
-// Debouncing a function
-function ClickHandler() {
-  const handleClick = useDebounce((value: string) => {
-    console.log('Clicked with value:', value)
-  }, 500)
+### useDebounceFunction
+
+Use this hook when you want to debounce a function that gets called frequently (e.g., event handlers, API calls).
+
+```typescript
+import { useDebounceFunction } from '@noeg/usedebounce'
+
+function AutosaveForm() {
+  const save = async (data: FormData) => {
+    await api.save(data)
+  }
+
+  // Create a debounced version of the save function
+  const debouncedSave = useDebounceFunction(save, 1000)
 
   return (
-    <button onClick={() => handleClick('test')}>Click me (debounced)</button>
+    <form
+      onChange={(e) => {
+        const data = new FormData(e.currentTarget)
+        // This will only call save() once, 1000ms after the last change
+        debouncedSave(data)
+      }}
+    >
+      {/* form fields */}
+    </form>
   )
 }
 ```
 
 ## API Reference
 
-### Parameters
+### useDebounceValue
 
-| Parameter | Type                      | Description               |
-| --------- | ------------------------- | ------------------------- |
-| `value`   | `T`                       | The value to debounce     |
-| `fn`      | `(...args: any[]) => any` | The function to debounce  |
-| `delay`   | `number`                  | The delay in milliseconds |
+```typescript
+function useDebounceValue<T>(value: T, delay: number): T
+```
 
-### Return Value
+#### Parameters
 
-- When debouncing a value: Returns the debounced value of type `T`
-- When debouncing a function: Returns a debounced version of the function
+| Parameter | Type     | Description               |
+| --------- | -------- | ------------------------- |
+| `value`   | `T`      | The value to debounce     |
+| `delay`   | `number` | The delay in milliseconds |
 
-## How it Works
+#### Returns
 
-The hook provides two main functionalities:
+Returns the debounced value of type `T`.
 
-1. **Value Debouncing**: When you pass a value, it will delay updating the debounced value until the specified delay has passed without any new updates.
+### useDebounceFunction
 
-2. **Function Debouncing**: When you pass a function, it returns a new function that will only execute after the specified delay has passed since its last invocation.
+```typescript
+function useDebounceFunction<T extends (...args: any[]) => any>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void
+```
 
-In both cases, the hook automatically handles cleanup to prevent memory leaks and ensures that only the most recent update is processed.
+#### Parameters
+
+| Parameter | Type     | Description               |
+| --------- | -------- | ------------------------- |
+| `fn`      | `T`      | The function to debounce  |
+| `delay`   | `number` | The delay in milliseconds |
+
+#### Returns
+
+Returns a debounced version of the provided function that:
+
+- Has the same parameters as the original function
+- Returns void (since it's debounced)
+- Will only execute after the specified delay
+- Will cancel any pending executions when called again
+
+## Backward Compatibility
+
+For backward compatibility, the default export is an alias for `useDebounceValue`:
+
+```typescript
+import { useDebounce } from '@noeg/usedebounce'
+// useDebounce is the same as useDebounceValue
+```
 
 ## Best Practices
 
-- Choose an appropriate delay based on your use case (e.g., 300-500ms for search inputs)
-- Use value debouncing for handling frequent state updates
-- Use function debouncing for handling frequent event callbacks
-- Remember that the debounced function maintains the same dependencies as the original function
+### When to use useDebounceValue
+
+- Form inputs that trigger expensive operations
+- Search inputs that make API calls
+- Window resize or scroll event values
+- Any frequently changing value that triggers side effects
+
+### When to use useDebounceFunction
+
+- Event handlers that make API calls
+- Save functions for auto-saving forms
+- Window resize or scroll event handlers
+- Any callback that gets called frequently and needs rate limiting
 
 ## License
 

@@ -3,7 +3,7 @@
   "dependencies": {
     "react": "^19.0.0"
   },
-  "description": "React hook for debouncing value or function calls",
+  "description": "React hooks for debouncing value or function calls",
   "devDependencies": {
     "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
