@@ -25,7 +25,7 @@
     "function",
     "hook"
   ],
-  "license": "ISC",
+  "license": "Unlicense",
   "main": "index.js",
   "module": "./dist/index.mjs",
   "name": "@noeg/usedebounce",
