@@ -1,0 +1,31 @@
+{
+  "author": "Noé Grangier",
+  "dependencies": {
+    "@testing-library/react": "^16.2.0",
+    "react": "^19.0.0"
+  },
+  "description": "React hooks to fetch data with polling",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/react": "^19.0.8",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "module": "./dist/index.mjs",
+  "name": "@noeg/usepolling",
+  "scripts": {
+    "build": "tsup",
+    "test": "jest"
+  },
+  "types": "./dist/index.d.ts",
+  "version": "1.0.0"
+}
