@@ -4,8 +4,10 @@ A collection of useful React hooks for common use cases. Each hook is published 
 
 ## Available Hooks
 
+### [useDebounce](./useDebounce)
+
 <details>
-<summary><h3><a href="./useDebounce">useDebounce</a></h3></summary>
+<summary>Description and Features</summary>
 
 A React hook for debouncing values and functions to optimize performance and limit the rate of executions.
 
@@ -17,8 +19,10 @@ A React hook for debouncing values and functions to optimize performance and lim
 - 🧪 Well tested
 </details>
 
+### [useLocalStorage](./useLocalStorage)
+
 <details>
-<summary><h3><a href="./useLocalStorage">useLocalStorage</a></h3></summary>
+<summary>Description and Features</summary>
 
 A React hook for persisting state in localStorage with TypeScript support and syncing across tabs/windows.
 
@@ -31,8 +35,10 @@ A React hook for persisting state in localStorage with TypeScript support and sy
 - 🌐 SSR friendly
 </details>
 
+### [usePolling](./usePolling)
+
 <details>
-<summary><h3><a href="./usePolling">usePolling</a></h3></summary>
+<summary>Description and Features</summary>
 
 A React hook for implementing polling functionality with configurable intervals, conditions, and callbacks.
 
@@ -44,8 +50,10 @@ A React hook for implementing polling functionality with configurable intervals,
 - 💪 TypeScript support
 </details>
 
+### [useTheme](./useTheme)
+
 <details>
-<summary><h3><a href="./useTheme">useTheme</a></h3></summary>
+<summary>Description and Features</summary>
 
 A React hook for implementing theme management with support for light, dark, and system themes.
 
