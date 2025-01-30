@@ -1,11 +1,11 @@
 {
   "author": "Noé Grangier",
   "dependencies": {
-    "@testing-library/react": "^16.2.0",
     "react": "^19.0.0"
   },
   "description": "React hooks to fetch data with polling",
   "devDependencies": {
+    "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.0.8",
     "jest": "^29.7.0",
