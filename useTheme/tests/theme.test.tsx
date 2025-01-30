@@ -13,21 +13,47 @@ import { ThemeProvider } from '../src/provider'
 
 jest.mock('@noeg/uselocalstorage')
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value
-    },
-    clear: () => {
-      store = {}
-    },
-  }
-})()
+let values: Record<string, any> = {}
 
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+const localStorageMock = {
+  getItem: (key: string): string | null => {
+    return values[key] || null
+  },
+  setItem: (key: string, value: string): void => {
+    values[key] = value
+  },
+  removeItem: (key: string): void => {
+    delete values[key]
+  },
+  clear: (): void => {
+    values = {}
+  },
+}
+
+jest.mock('@noeg/uselocalstorage', () => ({
+  useLocalStorage: (key: string, defaultValue: any) => {
+    const [state, setState] = React.useState(() => {
+      try {
+        const item = localStorageMock.getItem(key)
+        return item ? JSON.parse(item) : defaultValue
+      } catch {
+        return defaultValue
+      }
+    })
+
+    const setValue = (value: any) => {
+      try {
+        const valueToStore = value instanceof Function ? value(state) : value
+        setState(valueToStore)
+        localStorageMock.setItem(key, JSON.stringify(valueToStore))
+      } catch {
+        console.error('Error setting localStorage value')
+      }
+    }
+
+    return [state, setValue] as const
+  },
+}))
 
 // Mock matchMedia
 const matchMediaMock = (matches: boolean) => {
@@ -55,7 +81,7 @@ describe('ThemeProvider and useTheme', () => {
 
   beforeEach(() => {
     document.documentElement.classList.remove('light', 'dark')
-    localStorageMock.clear()
+    values = {} // Clear the mock localStorage values
   })
 
   afterEach(() => {
@@ -150,8 +176,10 @@ describe('ThemeProvider and useTheme', () => {
 
   it('should use custom default theme', () => {
     const { result } = renderHook(() => useTheme(), {
-      wrapper: ({ children }: any) => (
-        <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
+      wrapper: ({ children }) => (
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          {children}
+        </ThemeProvider>
       ),
     })
 
