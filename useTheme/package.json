@@ -28,10 +28,14 @@
   "main": "index.js",
   "module": "./dist/index.mjs",
   "name": "@noeg/usetheme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NoeGrangier/reusable-hooks/tree/main/useTheme"
+  },
   "scripts": {
     "build": "tsup",
     "test": "jest"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
