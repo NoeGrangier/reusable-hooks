@@ -1,0 +1,57 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: node-modules-cache
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-modules-
+            ${{ runner.os }}-node-modules-
+
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: npm run install:all
+
+      - name: Run all tests
+        run: npm test
+
+      - name: Report test status
+        if: always()
+        run: |
+          echo "::group::Test Results"
+          echo "Node version: ${{ matrix.node-version }}"
+          if [ $? -eq 0 ]; then
+            echo "✅ All tests passed"
+          else
+            echo "❌ Some tests failed"
+          fi
+          echo "::endgroup::"

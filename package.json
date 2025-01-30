@@ -1,0 +1,19 @@
+{
+  "name": "reusable-hooks",
+  "version": "1.0.0",
+  "description": "Collection of reusable React hooks",
+  "scripts": {
+    "test": "npm run test:all",
+    "test:all": "for dir in use*/; do (cd \"$dir\" && npm ci && npm test -- --watchAll=false); done",
+    "install:all": "for dir in use*/; do (cd \"$dir\" && npm ci); done"
+  },
+  "workspaces": [
+    "use*"
+  ],
+  "keywords": [
+    "react",
+    "hooks"
+  ],
+  "author": "Noé Grangier",
+  "license": "ISC"
+}
