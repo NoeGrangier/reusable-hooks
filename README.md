@@ -7,7 +7,7 @@ A collection of useful React hooks for common use cases. Each hook is published 
 ### [useDebounce](./useDebounce)
 
 <details>
-<summary>Description and Features</summary>
+<summary>Details</summary>
 
 A React hook for debouncing values and functions to optimize performance and limit the rate of executions.
 
@@ -22,7 +22,7 @@ A React hook for debouncing values and functions to optimize performance and lim
 ### [useLocalStorage](./useLocalStorage)
 
 <details>
-<summary>Description and Features</summary>
+<summary>Details</summary>
 
 A React hook for persisting state in localStorage with TypeScript support and syncing across tabs/windows.
 
@@ -35,10 +35,25 @@ A React hook for persisting state in localStorage with TypeScript support and sy
 - 🌐 SSR friendly
 </details>
 
+### [useOnScreen](./useOnScreen)
+
+<details>
+<summary>Details</summary>
+
+A React hook for detecting when an element enters or leaves the viewport with TypeScript support and IntersectionObserver API.
+
+- 🔄 Automatic polling with configurable intervals
+- ⏱️ Customizable polling conditions
+- 🎯 Success and error callbacks
+- ⚡ Immediate or delayed start options
+- 🛑 Manual control over polling (start/stop)
+- 💪 TypeScript support
+</details>
+
 ### [usePolling](./usePolling)
 
 <details>
-<summary>Description and Features</summary>
+<summary>Details</summary>
 
 A React hook for implementing polling functionality with configurable intervals, conditions, and callbacks.
 
@@ -50,10 +65,26 @@ A React hook for implementing polling functionality with configurable intervals,
 - 💪 TypeScript support
 </details>
 
+### [useScrollable](./useScrollable)
+
+<details>
+<summary>Details</summary>
+
+A React hook for managing scrollable containers with TypeScript support, providing scroll position tracking and automatic scroll-to-bottom functionality.
+
+- 📜 Track scroll position (top, middle, bottom)
+- 🔄 Automatic scroll-to-bottom functionality
+- 📏 Detect if content is scrollable
+- ⚡️ Optimized performance with ResizeObserver
+- 🛡️ Type-safe with TypeScript
+- 🧪 Well tested
+- 💬 Perfect for chat applications and infinite scrolling lists
+</details>
+
 ### [useTheme](./useTheme)
 
 <details>
-<summary>Description and Features</summary>
+<summary>Details</summary>
 
 A React hook for implementing theme management with support for light, dark, and system themes.
 

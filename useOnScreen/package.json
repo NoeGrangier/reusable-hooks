@@ -1,10 +1,9 @@
 {
   "author": "Noé Grangier",
   "dependencies": {
-    "@noeg/uselocalstorage": "^1.0.3",
     "react": "^19.0.0"
   },
-  "description": "React hook and provider for application theming",
+  "description": "React hooks for detecting if an element is on screen",
   "devDependencies": {
     "@testing-library/react": "^16.2.0",
     "@types/jest": "^29.5.14",
@@ -21,18 +20,19 @@
   ],
   "keywords": [
     "react",
-    "theme",
-    "hook",
-    "provider"
+    "onscreen",
+    "intersection",
+    "observer",
+    "hook"
   ],
   "license": "ISC",
   "main": "index.js",
   "module": "./dist/index.mjs",
-  "name": "@noeg/usetheme",
+  "name": "@noeg/useonscreen",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/NoeGrangier/reusable-hooks/tree/main/useTheme"
+    "url": "https://github.com/NoeGrangier/reusable-hooks/tree/main/useOnScreen"
   },
   "scripts": {
     "build": "tsup",
@@ -40,5 +40,5 @@
     "prepublishOnly": "npm run build"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.0.4"
+  "version": "1.0.2"
 }

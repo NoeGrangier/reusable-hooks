@@ -7,8 +7,11 @@ import {
   jest,
 } from '@jest/globals'
 import { act, renderHook } from '@testing-library/react'
+import React from 'react'
 import { useTheme } from '../src/hook'
 import { ThemeProvider } from '../src/provider'
+
+jest.mock('@noeg/uselocalstorage')
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -75,7 +78,7 @@ describe('ThemeProvider and useTheme', () => {
   })
 
   it('should use theme from localStorage when available', () => {
-    localStorageMock.setItem('vite-ui-theme', 'dark')
+    localStorageMock.setItem('vite-ui-theme', '"dark"')
 
     const { result } = renderHook(() => useTheme(), {
       wrapper,
@@ -96,7 +99,7 @@ describe('ThemeProvider and useTheme', () => {
 
     expect(result.current.theme).toBe('dark')
     expect(document.documentElement.classList.contains('dark')).toBeTruthy()
-    expect(localStorageMock.getItem('vite-ui-theme')).toBe('dark')
+    expect(localStorageMock.getItem('vite-ui-theme')).toBe('"dark"')
   })
 
   it('should handle system theme preference - dark', () => {
@@ -142,7 +145,7 @@ describe('ThemeProvider and useTheme', () => {
       result.current.setTheme('dark')
     })
 
-    expect(localStorageMock.getItem('custom-theme-key')).toBe('dark')
+    expect(localStorageMock.getItem('custom-theme-key')).toBe('"dark"')
   })
 
   it('should use custom default theme', () => {

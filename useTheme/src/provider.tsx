@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@noeg/uselocalstorage'
 import { createContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
@@ -24,11 +25,13 @@ export function ThemeProvider({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  )
-  const [systemTheme, setSystemTheme] = useState<SystemTheme>(
-    () => (localStorage.getItem(storageKey) as SystemTheme) || defaultTheme
+  const [theme, setTheme] = useLocalStorage<Theme>(storageKey, defaultTheme)
+  const [systemTheme, setSystemTheme] = useState<SystemTheme>(() =>
+    theme === 'system'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : theme
   )
 
   useEffect(() => {
@@ -54,10 +57,7 @@ export function ThemeProvider({
   const value = {
     theme,
     systemTheme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
+    setTheme,
   }
 
   return (

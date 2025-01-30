@@ -28,14 +28,16 @@
   "main": "index.js",
   "module": "./dist/index.mjs",
   "name": "@noeg/usepolling",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/NoeGrangier/reusable-hooks/tree/main/usePolling"
   },
   "scripts": {
     "build": "tsup",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.0.3"
+  "version": "1.0.5"
 }

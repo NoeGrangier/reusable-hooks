@@ -2,9 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "./dist",
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "esModuleInterop": true
+    "jsx": "react-jsx"
   },
   "include": ["src/**/*"]
 }

@@ -27,14 +27,16 @@
   "main": "index.js",
   "module": "./dist/index.mjs",
   "name": "@noeg/uselocalstorage",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/NoeGrangier/reusable-hooks/tree/main/useLocalStorage"
   },
   "scripts": {
     "build": "tsup",
+    "prepublishOnly": "npm run build",
     "test": "jest"
   },
   "types": "./dist/index.d.ts",
-  "version": "1.0.0"
+  "version": "1.0.3"
 }
