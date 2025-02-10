@@ -178,7 +178,7 @@ function AutoScrollContent() {
 
 ## License
 
-MIT
+This project is licensed under the [Unlicense](LICENSE).
 
 ## Contributing
 

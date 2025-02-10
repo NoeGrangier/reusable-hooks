@@ -149,7 +149,7 @@ import { useDebounce } from '@noeg/usedebounce'
 
 ## License
 
-MIT
+This project is licensed under the [Unlicense](LICENSE).
 
 ## Contributing
 

@@ -99,7 +99,7 @@ The theme provider adds either `light` or `dark` class to your document's root e
 
 ## License
 
-MIT
+This project is licensed under the [Unlicense](LICENSE).
 
 ## Contributing
 

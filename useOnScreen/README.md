@@ -146,7 +146,7 @@ function PartialVisibility() {
 
 ## License
 
-MIT
+This project is licensed under the [Unlicense](LICENSE).
 
 ## Contributing
 

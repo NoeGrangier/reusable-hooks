@@ -98,7 +98,7 @@ A React hook for implementing theme management with support for light, dark, and
 
 ## License
 
-MIT
+This project is licensed under the [Unlicense](LICENSE).
 
 ## Contributing
 
