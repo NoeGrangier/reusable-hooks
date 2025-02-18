@@ -23,7 +23,18 @@ export function useLocalStorage<T>(
   // Update localStorage when state changes
   useEffect(() => {
     try {
+      const oldValue = window.localStorage.getItem(key)
+
       window.localStorage.setItem(key, JSON.stringify(storedValue))
+
+      if (process.env.NODE_ENV !== 'test') {
+        window.dispatchEvent(new StorageEvent('storage', {
+          key,
+          newValue: JSON.stringify(storedValue),
+          oldValue,
+          url: window.location.href,
+        }))
+      }
     } catch (error) {
       console.warn(`Error saving to localStorage key "${key}":`, error)
     }
@@ -32,7 +43,7 @@ export function useLocalStorage<T>(
   // Listen for changes in other tabs
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === key && event.newValue) {
+      if (event.key === key && (event.newValue && event.newValue !== JSON.stringify(storedValue))) {
         setStoredValue(JSON.parse(event.newValue))
       }
     }
