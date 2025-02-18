@@ -36,15 +36,15 @@ publish_package() {
 # Main script
 echo "Starting publication of all packages..."
 
-# Array of package directories
-packages=(
-    "useDebounce"
-    "useLocalStorage"
-    "useOnScreen"
-    "usePolling"
-    "useScrollable"
-    "useTheme"
-)
+# Find all directories starting with "use"
+packages=($(find . -maxdepth 1 -type d -name "use*" -exec basename {} \;))
+
+if [ ${#packages[@]} -eq 0 ]; then
+    echo -e "${RED}No packages found starting with 'use'${NC}"
+    exit 1
+fi
+
+echo "Found packages to publish: ${packages[*]}"
 
 # Counter for successful and failed publications
 success_count=0
