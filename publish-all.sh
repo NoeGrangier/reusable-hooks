@@ -6,32 +6,29 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Function to publish a package
-publish_package() {
-    local package_dir=$1
-    echo -e "\n${YELLOW}Publishing ${package_dir}...${NC}"
-    
-    # Navigate to package directory
-    cd "$package_dir" || exit 1
-    
-    # Install dependencies
-    echo "Installing dependencies..."
-    npm install || { echo -e "${RED}Failed to install dependencies for ${package_dir}${NC}"; return 1; }
-    
-    # Build the package
-    echo "Building package..."
-    npm run build || { echo -e "${RED}Failed to build ${package_dir}${NC}"; return 1; }
-    
-    # Publish the package
-    echo "Publishing to npm..."
-    npm publish --access public || { echo -e "${RED}Failed to publish ${package_dir}${NC}"; return 1; }
-    
-    echo -e "${GREEN}Successfully published ${package_dir}${NC}"
-    
-    # Return to root directory
-    cd ..
-    return 0
+# Display usage
+usage() {
+    echo "Usage: $0 [npm_username]"
+    echo "  npm_username   : (Optional) NPM username to publish under"
+    echo ""
+    echo "Examples:"
+    echo "  $0         # Publish all packages under @noeg namespace"
+    echo "  $0 myuser  # Publish all packages under @myuser namespace"
+    exit 1
 }
+
+# Check if help is requested
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    usage
+fi
+
+NPM_USERNAME=""
+if [ "$#" -eq 1 ]; then
+    NPM_USERNAME="$1"
+    echo -e "${YELLOW}NPM username provided. Will publish packages under @${NPM_USERNAME}${NC}"
+else
+    echo -e "${YELLOW}No NPM username provided. Will publish packages under @noeg${NC}"
+fi
 
 # Main script
 echo "Starting publication of all packages..."
@@ -53,7 +50,7 @@ failed_packages=()
 
 # Loop through each package
 for package in "${packages[@]}"; do
-    if publish_package "$package"; then
+    if ./publish-package.sh "$package" "$NPM_USERNAME"; then
         ((success_count++))
     else
         ((failed_count++))

@@ -2,6 +2,38 @@
 
 A collection of useful React hooks for common use cases. Each hook is published as a separate npm package for easy installation and minimal bundle size.
 
+## Publishing
+
+The repository includes two scripts for publishing packages to npm:
+
+### Publishing a Single Package
+
+Use `publish-package.sh` to publish a single package:
+
+```bash
+# Publish under the original @noeg namespace
+./publish-package.sh useDebounce
+
+# Publish under your own npm username
+./publish-package.sh useDebounce your-username
+```
+
+### Publishing All Packages
+
+Use `publish-all.sh` to publish all hooks at once:
+
+```bash
+# Publish all packages under the original @noeg namespace
+./publish-all.sh
+
+# Publish all packages under your own npm username
+./publish-all.sh your-username
+```
+
+Both scripts will temporarily modify the package.json files to use your npm username instead of @noeg when a username is provided, publish the packages, then restore the original package.json files.
+
+You can use `-h` or `--help` with either script to see usage instructions.
+
 ## Available Hooks
 
 ### [useDebounce](./useDebounce)
