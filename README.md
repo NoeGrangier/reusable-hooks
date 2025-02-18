@@ -24,7 +24,16 @@ Use `publish-all.sh` to publish all hooks at once:
 ./publish-all.sh your-username
 ```
 
-Both scripts will temporarily modify the package.json files to use your npm username instead of @noeg with the provided username, publish the packages, then restore the original package.json files.
+When publishing with a username, the scripts will:
+
+1. Temporarily modify package.json files to use your npm username instead of @noeg
+2. Update each package's README.md to show the correct installation instructions with your username
+3. Update all source files (_.ts, _.tsx, _.js, _.jsx) in src/ and tests/ directories to use your username in imports
+4. Increment the patch version number (e.g., 1.0.2 → 1.0.3) to avoid conflicts with existing packages
+5. Publish the packages
+6. Restore all modified files back to their original state
+
+The script handles both ES6 imports and CommonJS require statements in source files.
 
 You can use `-h` or `--help` with either script to see usage instructions.
 

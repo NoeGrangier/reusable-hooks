@@ -35,8 +35,8 @@ else
     echo -e "${YELLOW}No NPM username provided. Will publish package under @noeg${NC}"
 fi
 
-# Function to modify package.json
-modify_package_json() {
+# Function to modify package.json, README.md and source files
+modify_package_files() {
     local package_dir=$1
     local username=$2
     local action=$3  # 'replace' or 'restore'
@@ -47,6 +47,7 @@ modify_package_json() {
     fi
     
     local package_json="${package_dir}/package.json"
+    local readme="${package_dir}/README.md"
     
     if [ ! -f "$package_json" ]; then
         echo -e "${RED}package.json not found in ${package_dir}${NC}"
@@ -56,13 +57,74 @@ modify_package_json() {
     if [ "$action" = "replace" ]; then
         # Save original content for later restoration
         cp "$package_json" "${package_json}.backup"
-        # Replace @noeg/ with @username/
+        if [ -f "$readme" ]; then
+            cp "$readme" "${readme}.backup"
+        fi
+        
+        # Create a list of files to modify
+        local source_files=()
+        # Find all TypeScript and JavaScript files in src and tests directories
+        if [ -d "${package_dir}/src" ]; then
+            while IFS= read -r file; do
+                source_files+=("$file")
+                cp "$file" "${file}.backup"
+            done < <(find "${package_dir}/src" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \))
+        fi
+        if [ -d "${package_dir}/tests" ]; then
+            while IFS= read -r file; do
+                source_files+=("$file")
+                cp "$file" "${file}.backup"
+            done < <(find "${package_dir}/tests" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \))
+        fi
+        
+        # Replace @noeg/ with @username/ in package.json
         sed -i '' "s/@noeg\//@${username}\//g" "$package_json"
+        
+        # Increment patch version when publishing under different username
+        if [ -n "$username" ]; then
+            # Extract current version
+            local version=$(node -p "require('./package.json').version")
+            # Increment patch version
+            local new_version=$(echo "$version" | awk -F. '{$NF = $NF + 1;} 1' OFS=.)
+            # Update version in package.json
+            sed -i '' "s/\"version\": \"${version}\"/\"version\": \"${new_version}\"/g" "$package_json"
+            echo -e "${YELLOW}Incrementing version from ${version} to ${new_version}${NC}"
+        fi
+        
+        # Replace @noeg/ with @username/ in README.md if it exists
+        if [ -f "$readme" ]; then
+            sed -i '' "s/@noeg\//@${username}\//g" "$readme"
+            # Also replace installation instructions
+            sed -i '' "s/npm install @noeg\//npm install @${username}\//g" "$readme"
+            sed -i '' "s/yarn add @noeg\//yarn add @${username}\//g" "$readme"
+        fi
+        
+        # Replace @noeg/ with @username/ in all source files
+        for file in "${source_files[@]}"; do
+            if [ -f "$file" ]; then
+                echo "Updating imports in $file"
+                sed -i '' "s/@noeg\//@${username}\//g" "$file"
+                # Also handle require statements
+                sed -i '' "s/require('@noeg\//require('@${username}\//g" "$file"
+            fi
+        done
+        
     elif [ "$action" = "restore" ]; then
         # Restore from backup
         if [ -f "${package_json}.backup" ]; then
             mv "${package_json}.backup" "$package_json"
         fi
+        if [ -f "${readme}.backup" ]; then
+            mv "${readme}.backup" "$readme"
+        fi
+        
+        # Restore all source files from backup
+        while IFS= read -r backup_file; do
+            original_file="${backup_file%.backup}"
+            if [ -f "$backup_file" ]; then
+                mv "$backup_file" "$original_file"
+            fi
+        done < <(find "$package_dir" -type f -name "*.backup")
     fi
 }
 
@@ -80,13 +142,13 @@ cd "$PACKAGE_DIR" || exit 1
 
 echo -e "\n${YELLOW}Publishing ${PACKAGE_DIR}...${NC}"
 
-# Modify package.json with new username
-modify_package_json "." "$NPM_USERNAME" "replace"
+# Modify package files with new username
+modify_package_files "." "$NPM_USERNAME" "replace"
 
 # Install dependencies
 echo "Installing dependencies..."
 npm install || { 
-    modify_package_json "." "$NPM_USERNAME" "restore"
+    modify_package_files "." "$NPM_USERNAME" "restore"
     echo -e "${RED}Failed to install dependencies for ${PACKAGE_DIR}${NC}"
     cd "$WORKSPACE_ROOT"
     exit 1
@@ -95,7 +157,7 @@ npm install || {
 # Build the package
 echo "Building package..."
 npm run build || { 
-    modify_package_json "." "$NPM_USERNAME" "restore"
+    modify_package_files "." "$NPM_USERNAME" "restore"
     echo -e "${RED}Failed to build ${PACKAGE_DIR}${NC}"
     cd "$WORKSPACE_ROOT"
     exit 1
@@ -104,14 +166,14 @@ npm run build || {
 # Publish the package
 echo "Publishing to npm..."
 npm publish --access public || { 
-    modify_package_json "." "$NPM_USERNAME" "restore"
+    modify_package_files "." "$NPM_USERNAME" "restore"
     echo -e "${RED}Failed to publish ${PACKAGE_DIR}${NC}"
     cd "$WORKSPACE_ROOT"
     exit 1
 }
 
-# Restore original package.json
-modify_package_json "." "$NPM_USERNAME" "restore"
+# Restore original package files
+modify_package_files "." "$NPM_USERNAME" "restore"
 
 echo -e "${GREEN}Successfully published ${PACKAGE_DIR}${NC}"
 

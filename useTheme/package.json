@@ -1,7 +1,7 @@
 {
   "author": "Noé Grangier",
   "dependencies": {
-    "@noeg/uselocalstorage": "^1.0.3",
+    "@lonestone/uselocalstorage": "^1.0.3",
     "react": "^19.0.0"
   },
   "description": "React hook and provider for application theming",
@@ -28,7 +28,7 @@
   "license": "Unlicense",
   "main": "index.js",
   "module": "./dist/index.mjs",
-  "name": "@noeg/usetheme",
+  "name": "@lonestone/usetheme",
   "private": false,
   "repository": {
     "type": "git",

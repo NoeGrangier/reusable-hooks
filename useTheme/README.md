@@ -5,11 +5,11 @@ A React hook for implementing theme management with support for light, dark, and
 ## Installation
 
 ```bash
-npm install @noeg/usetheme
+npm install @lonestone/usetheme
 # or
-yarn add @noeg/usetheme
+yarn add @lonestone/usetheme
 # or
-pnpm add @noeg/usetheme
+pnpm add @lonestone/usetheme
 ```
 
 ## Features
@@ -24,7 +24,7 @@ pnpm add @noeg/usetheme
 ## Usage
 
 ```typescript
-import { ThemeProvider, useTheme } from '@noeg/usetheme'
+import { ThemeProvider, useTheme } from '@lonestone/usetheme'
 
 // Wrap your app with ThemeProvider
 function App() {
